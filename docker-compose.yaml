@@ -70,7 +70,7 @@ services:
     tty: true
     networks:
       - kafka
-  kafka_manager:
+  kafka-manager:
     container_name: kakfa-manager
     image: hlebalbau/kafka-manager:stable
     restart: always
@@ -83,7 +83,7 @@ services:
       - env/kafka_manager.env
     networks:
       - kafka
-  kafka_ui: 
+  kafka-ui: 
     container_name: kakfa-ui
     image: provectuslabs/kafka-ui:latest
     ports:
