@@ -4,9 +4,10 @@ networks:
   default:
     name: kafka
     driver: bridge
-    
+
 services:
   zookeeper:
+    container_name: zookeeper
     build: 
       context: kafka
       dockerfile: ../dockerfiles/ZookeeperDockerfile
@@ -15,17 +16,24 @@ services:
       - ./config/zookeeper/zookeeper.properties:/app/config/zookeeper.properties
   
   kafka:
+    container_name: kafka
     build: 
       context: kafka
       dockerfile: ../dockerfiles/KafkaDockerfile
+    depends_on:
+      - zookeeper
     volumes:
       - ./data/kafka/:/tmp/kafka-logs/
       - ./config/kafka-1/server.properties:/app/config/server.properties
     ports:
       - 5000:5000
 
-  ui: 
+  kafka-ui: 
+    container_name: kafka-ui
     image: provectuslabs/kafka-ui:latest
+    depends_on:
+      - zookeeper
+      - kafka
     ports:
       - "8080:8080"
     env_file:
