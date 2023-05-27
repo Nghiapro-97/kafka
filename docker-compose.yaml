@@ -15,7 +15,7 @@ services:
     container_name: kafka-1
     image: aimvector/kafka:3.4.0
     build: 
-      context: kafka
+      context: .
       dockerfile: dockerfile
     volumes:
       - ./config/kafka-1/server.properties:/kafka/config/server.properties
