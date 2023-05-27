@@ -4,18 +4,14 @@ networks:
   default:
     name: kafka
     driver: bridge
-
-volumes:
-  kafkadata:
-  zookeeperdata:
-
+    
 services:
   zookeeper:
     build: 
       context: kafka
       dockerfile: ../dockerfiles/ZookeeperDockerfile
     volumes:
-      - zookeeperdata:/tmp/zookeeper
+      - ./data/zookeeper/:/tmp/zookeeper/
       - ./config/zookeeper/zookeeper.properties:/app/config/zookeeper.properties
   
   kafka:
@@ -23,7 +19,7 @@ services:
       context: kafka
       dockerfile: ../dockerfiles/KafkaDockerfile
     volumes:
-      - kafkadata:/tmp/kafka-logs
+      - ./data/kafka/:/tmp/kafka-logs/
       - ./config/kafka-1/server.properties:/app/config/server.properties
     ports:
       - 5000:5000
