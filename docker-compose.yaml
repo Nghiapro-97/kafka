@@ -57,5 +57,3 @@ services:
     environment:
       ZK_HOSTS: zookeeper:14000
       APPLICATION_SECRET: "random-secret"
-    networks:
-      - kafka
