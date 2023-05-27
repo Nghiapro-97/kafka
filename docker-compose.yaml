@@ -4,7 +4,7 @@ services:
     container_name: zookeeper-1
     image: aimvector/zookeeper:3.4.0
     build:
-      context: kafka
+      context: ./zookeeper
       dockerfile: ../zookeeper/dockerfile
     volumes:
       - ./config/zookeeper-1/zookeeper.properties:/kafka/config/zookeeper.properties
