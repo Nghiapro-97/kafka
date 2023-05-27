@@ -1,13 +1,13 @@
 FROM openjdk:11.0.10-jre-buster
 
 RUN apt-get update && \
-    apt-get install -y curl
+    apt-get install -y wget
          
 ENV KAFKA_VERSION 3.4.0
 ENV SCALA_VERSION 2.13 
 
 RUN mkdir /tmp/kafka && \
-    curl "https://downloads.apache.org/kafka/${KAFKA_VERSION}/kafka_${SCALA_VERSION}-${KAFKA_VERSION}.tgz" \
+    wget "https://downloads.apache.org/kafka/${KAFKA_VERSION}/kafka_${SCALA_VERSION}-${KAFKA_VERSION}.tgz" \
     -o /tmp/kafka/kafka.tgz && \
     mkdir /kafka && cd /kafka && \
     tar -xvzf /tmp/kafka/kafka.tgz --strip 1
