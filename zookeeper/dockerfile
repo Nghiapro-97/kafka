@@ -6,7 +6,7 @@ RUN mkdir /tmp/kafka && \
     apt-get update && \
     apt-get install -y curl
          
-RUN curl "https://archive.apache.org/dist/kafka/${KAFKA_VERSION}/kafka_${SCALA_VERSION}-${KAFKA_VERSION}.tgz" \
+RUN curl "https://downloads.apache.org/kafka/${KAFKA_VERSION}/kafka_${SCALA_VERSION}-${KAFKA_VERSION}.tgz" \
     -o /tmp/kafka/kafka.tgz && \
     mkdir /kafka && cd /kafka && \
     tar -xvzf /tmp/kafka/kafka.tgz --strip 1
