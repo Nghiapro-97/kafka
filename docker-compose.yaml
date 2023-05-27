@@ -36,5 +36,26 @@ services:
       - kafka
     ports:
       - "8080:8080"
-    env_file:
-      - env/ui.env
+    environment:
+      KAFKA_CLUSTERS_0_NAME: local
+      KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka:5000
+      KAFKA_CLUSTERS_0_ZOOKEEPER: zookeeper:14000
+      KAFKA_CLUSTERS_0_PROPERTIES_SECURITY_PROTOCOL: SASL_PLAINTEXT
+      KAFKA_CLUSTERS_0_PROPERTIES_SASL_MECHANISM: PLAIN
+      KAFKA_CLUSTERS_0_PROPERTIES_SASL_JAAS_CONFIG: 'org.apache.kafka.common.security.plain.PlainLoginModule required username="admin" password="admin-secret";'
+      DYNAMIC_CONFIG_ENABLED: true # not necessary for sasl auth, added for tests
+  
+  kafka-manager:
+    container_name: kakfa-manager
+    image: hlebalbau/kafka-manager:stable
+    restart: always
+    ports:
+      - "9000:9000"
+    depends_on:
+      - zookeeper
+      - kafka
+    environment:
+      ZK_HOSTS: zookeeper:14000
+      APPLICATION_SECRET: "random-secret"
+    networks:
+      - kafka
