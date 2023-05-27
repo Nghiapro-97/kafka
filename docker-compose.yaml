@@ -1,60 +1,36 @@
 version: "3.9"
+
+networks:
+  default:
+    name: kafka
+    driver: bridge
+
+volumes:
+  kafkadata:
+  zookeeperdata:
+
 services:
-  zookeeper-1:
-    container_name: zookeeper-1
-    image: aimvector/zookeeper:3.4.0
-    build:
+  zookeeper:
+    build: 
       context: kafka
       dockerfile: ../dockerfiles/ZookeeperDockerfile
     volumes:
-      - ./config/zookeeper-1/zookeeper.properties:/kafka/config/zookeeper.properties
-      - ./data/zookeeper-1/:/tmp/zookeeper/
-    networks:
-      - kafka
-  kafka-1:
-    container_name: kafka-1
-    image: aimvector/kafka:3.4.0
+      - zookeeperdata:/tmp/zookeeper
+      - ./config/zookeeper/zookeeper.properties:/app/config/zookeeper.properties
+  
+  kafka:
     build: 
       context: kafka
       dockerfile: ../dockerfiles/KafkaDockerfile
     volumes:
-      - ./config/kafka-1/server.properties:/kafka/config/server.properties
-      - ./data/kafka-1/:/tmp/kafka-logs/
+      - kafkadata:/tmp/kafka-logs
+      - ./config/kafka-1/server.properties:/app/config/server.properties
     ports:
-      - "5000:5000"
-    networks:
-      - kafka
-  kafka-producer:
-    container_name: kafka-producer
-    image: aimvector/kafka:3.4.0
-    build: 
-      context: .
-    working_dir: /kafka
-    entrypoint: /bin/bash
-    stdin_open: true
-    tty: true
-    networks:
-      - kafka
-  kafka-consumer:
-    container_name: kafka-consumer
-    image: aimvector/kafka:3.4.0
-    build: 
-      context: .
-    working_dir: /kafka
-    entrypoint: /bin/bash
-    stdin_open: true
-    tty: true
-    networks:
-      - kafka
-  kafka-ui: 
-    container_name: kakfa-ui
+      - 5000:5000
+
+  ui: 
     image: provectuslabs/kafka-ui:latest
     ports:
-      - "8081:8081"
+      - "8080:8080"
     env_file:
-      - env/kafkaui.env
-    networks:
-      - kafka
-networks: 
-  kafka:
-    name: kafka
+      - env/ui.env
