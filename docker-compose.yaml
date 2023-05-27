@@ -4,7 +4,7 @@ services:
     container_name: zookeeper-1
     image: aimvector/zookeeper:3.4.0
     build:
-      context: zookeeper
+      context: kafka
       dockerfile: ../zookeeper/dockerfile
     volumes:
       - ./config/zookeeper-1/zookeeper.properties:/kafka/config/zookeeper.properties
@@ -15,37 +15,13 @@ services:
     container_name: kafka-1
     image: aimvector/kafka:3.4.0
     build: 
-      context: .
-      dockerfile: dockerfile
+      context: kafka
+      dockerfile: ./dockerfile
     volumes:
       - ./config/kafka-1/server.properties:/kafka/config/server.properties
       - ./data/kafka-1/:/tmp/kafka-logs/
     ports:
       - "5000:5000"
-    networks:
-      - kafka
-  kafka-2:
-    container_name: kafka-2
-    image: aimvector/kafka:3.4.0
-    build: 
-      context: .
-    volumes:
-      - ./config/kafka-2/server.properties:/kafka/config/server.properties
-      - ./data/kafka-2/:/tmp/kafka-logs/
-    ports:
-      - "6000:6000"
-    networks:
-      - kafka
-  kafka-3:
-    container_name: kafka-3
-    image: aimvector/kafka:3.4.0
-    build: 
-      context: .
-    volumes:
-      - ./config/kafka-3/server.properties:/kafka/config/server.properties
-      - ./data/kafka-3/:/tmp/kafka-logs/
-    ports:
-      - "7000:7000"
     networks:
       - kafka
   kafka-producer:
@@ -70,24 +46,11 @@ services:
     tty: true
     networks:
       - kafka
-  kafka-manager:
-    container_name: kakfa-manager
-    image: hlebalbau/kafka-manager:stable
-    restart: always
-    ports:
-      - "9000:9000"
-    depends_on:
-      - zookeeper-1
-      - kafka-1
-    environment:
-      - env/kafka_manager.env
-    networks:
-      - kafka
   kafka-ui: 
     container_name: kakfa-ui
     image: provectuslabs/kafka-ui:latest
     ports:
-      - "8082:8082"
+      - "8081:8081"
     env_file:
       - env/kafkaui.env
     networks:
