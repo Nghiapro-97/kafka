@@ -11,11 +11,9 @@ services:
     build: 
       context: kafka
       dockerfile: ../dockerfiles/ZookeeperDockerfile
-    environment:
-      ZOO_MY_ID: 1
-    # volumes:
-    #   - ./data/zookeeper/:/tmp/zookeeper/
-    #   - ./config/zookeeper/zookeeper.properties:/kafka/config/zookeeper.properties
+    volumes:
+      - ./data/zookeeper/:/tmp/zookeeper/
+      - ./config/zookeeper/zookeeper.properties:/app/config/zookeeper.properties
   
   kafka:
     container_name: kafka
@@ -24,14 +22,11 @@ services:
       dockerfile: ../dockerfiles/KafkaDockerfile
     depends_on:
       - zookeeper
-    environment:
-      KAFKA_ADVERTISED_HOST_NAME: 192.168.84.133
-      KAFKA_ZOOKEEPER_CONNECT: zookeeper:14000
-    # volumes:
-    #   - ./data/kafka/:/tmp/kafka-logs/
-    #   - ./config/kafka-1/server.properties:/kafka/config/server.properties
+    volumes:
+      - ./data/kafka/:/tmp/kafka-logs/
+      - ./config/kafka-1/server.properties:/app/config/server.properties
     ports:
-      - 9092:9092
+      - 5000:5000
 
   kafka-ui: 
     container_name: kafka-ui
@@ -43,7 +38,7 @@ services:
       - "8080:8080"
     environment:
       KAFKA_CLUSTERS_0_NAME: local
-      KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka:9092
+      KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka:5000
       KAFKA_CLUSTERS_0_ZOOKEEPER: zookeeper:14000
       KAFKA_CLUSTERS_0_PROPERTIES_SECURITY_PROTOCOL: SASL_PLAINTEXT
       KAFKA_CLUSTERS_0_PROPERTIES_SASL_MECHANISM: PLAIN
