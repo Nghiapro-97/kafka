@@ -11,9 +11,11 @@ services:
     build: 
       context: kafka
       dockerfile: ../dockerfiles/ZookeeperDockerfile
-    volumes:
-      - ./data/zookeeper/:/tmp/zookeeper/
-      - ./config/zookeeper/zookeeper.properties:/kafka/config/zookeeper.properties
+    environment:
+      ZOO_MY_ID: 1
+    # volumes:
+    #   - ./data/zookeeper/:/tmp/zookeeper/
+    #   - ./config/zookeeper/zookeeper.properties:/kafka/config/zookeeper.properties
   
   kafka:
     container_name: kafka
@@ -22,9 +24,12 @@ services:
       dockerfile: ../dockerfiles/KafkaDockerfile
     depends_on:
       - zookeeper
-    volumes:
-      - ./data/kafka/:/tmp/kafka-logs/
-      - ./config/kafka-1/server.properties:/kafka/config/server.properties
+    environment:
+      KAFKA_ADVERTISED_HOST_NAME: 192.168.84.133
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:14000
+    # volumes:
+    #   - ./data/kafka/:/tmp/kafka-logs/
+    #   - ./config/kafka-1/server.properties:/kafka/config/server.properties
     ports:
       - 9092:9092
 
