@@ -13,7 +13,7 @@ services:
       dockerfile: ../dockerfiles/ZookeeperDockerfile
     volumes:
       - ./data/zookeeper/:/tmp/zookeeper/
-      - ./config/zookeeper/zookeeper.properties:/kafka/config/server.properties
+      - ./config/zookeeper/zookeeper.properties:/app/config/zookeeper.properties
   
   kafka:
     container_name: kafka
@@ -24,7 +24,7 @@ services:
       - zookeeper
     volumes:
       - ./data/kafka/:/tmp/kafka-logs/
-      - ./config/kafka-1/server.properties:/kafka/config/server.properties
+      - ./config/kafka-1/server.properties:/app/config/server.properties
     ports:
       - 9092:9092
 
